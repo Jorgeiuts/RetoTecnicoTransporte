@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EtupModule } from './etup/etup.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { EtupModule } from './etup/etup.module';
 
     //Importamos el modulo de la entidad Etup
     EtupModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
