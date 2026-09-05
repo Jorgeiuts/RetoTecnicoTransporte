@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from "@nestjs/common";
+import { Controller, Get, Post, Query } from "@nestjs/common";
 import { EtupService } from "./etup.service";
 
 //Controlador para la entidad Etup
@@ -11,6 +11,32 @@ export class EtupController {
     @Post('sync')
     sync() {
         return this.etupService.obtenerDataApi();
+    }
+
+    //Metodo para obtener las estadisticas de los registros de la entidad Etup
+    @Get('estadisticas')
+    obtenerEstadisticas(
+        //Definimos los parametros de la query
+        @Query('anioInicio') anioInicio: string,
+        @Query('mesInicio') mesInicio: string,
+        @Query('anioFin') anioFin: string,
+        @Query('mesFin') mesFin: string,
+        @Query('transporte') transporte?: string,
+    ) {
+        //Retornamos las estadisticas
+        return this.etupService.obtenerEstadisticas({
+            anioInicio: Number(anioInicio),
+            mesInicio: Number(mesInicio),
+            anioFin: Number(anioFin),
+            mesFin: Number(mesFin),
+            transporte: transporte || undefined,
+        });
+    }
+
+    //Metodo para obtener los transportes de la entidad Etup
+    @Get('transportes')
+    obtenerTransportes() {
+        return this.etupService.obtenerTransportes();
     }
 
     //Metodo para obtener todos los registros de la entidad Etup
