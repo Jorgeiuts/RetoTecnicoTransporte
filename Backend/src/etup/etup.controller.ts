@@ -3,7 +3,7 @@ import { EtupService } from "./etup.service";
 
 //Controlador para la entidad Etup
 @Controller('etup')
-export class EtupControler {
+export class EtupController {
     //Inyectamos el servicio de la entidad Etup
     constructor(private readonly etupService: EtupService) {}
 
