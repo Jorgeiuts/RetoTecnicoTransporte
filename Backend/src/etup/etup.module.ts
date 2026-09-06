@@ -3,7 +3,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Etup } from "./etup.entity";
 import { EtupService } from "./etup.service";
 import { EtupController } from "./etup.controller";
-import { AuthModule } from '../auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
