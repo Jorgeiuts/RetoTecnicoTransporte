@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Query } from "@nestjs/common";
+import { Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
 import { EtupService } from "./etup.service";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 
 //Controlador para la entidad Etup
+@UseGuards(JwtAuthGuard)
 @Controller('etup')
 export class EtupController {
     //Inyectamos el servicio de la entidad Etup
