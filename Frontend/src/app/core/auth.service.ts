@@ -16,7 +16,7 @@ export class AuthService {
 
   iniciarSesion(email: string, password: string) {
     return this.http
-    .post<{ access_token: string }>(`${environment.apiUrl}/auth/iniciar-sesion`, {
+    .post<{ access_token: string }>(`${environment.apiUrl}/auth/inicio-sesion`, {
       email,
       password,
     })
@@ -33,7 +33,7 @@ export class AuthService {
       error: () => undefined,
     });
     this.isLoggedIn.set(false);
-    this.router.navigateByUrl('/auth/iniciar-sesion');
+    this.router.navigateByUrl('/login');
   }
 
   obtenerToken() {
