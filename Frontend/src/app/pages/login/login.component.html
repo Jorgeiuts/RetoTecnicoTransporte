@@ -1,0 +1,20 @@
+<section class="login-page">
+  <form class="login-card" (ngSubmit)="onSubmit()">
+    <h1>Reto Técnico</h1>
+    <p>Inicia sesión para continuar</p>
+    <label>
+      Correo
+      <input type="email" [(ngModel)]="email" name="email" required />
+    </label>
+    <label>
+      Contraseña
+      <input type="password" [(ngModel)]="password" name="password" required />
+    </label>
+    @if (error) {
+      <p class="error">{{ error }}</p>
+    }
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Entrando...' : 'Iniciar sesión' }}
+    </button>
+  </form>
+</section>

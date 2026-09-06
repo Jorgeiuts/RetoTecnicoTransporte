@@ -1,0 +1,46 @@
+<header class="topbar">
+  <strong>Dashboard ETUP</strong>
+  <button type="button" (click)="auth.cerrarSesion()">Cerrar sesión</button>
+</header>
+<section class="filters">
+  <label>
+    Año inicio
+    <input type="number" [(ngModel)]="anioInicio" />
+  </label>
+  <label>
+    Mes inicio
+    <input type="number" min="1" max="12" [(ngModel)]="mesInicio" />
+  </label>
+  <label>
+    Año fin
+    <input type="number" [(ngModel)]="anioFin" />
+  </label>
+  <label>
+    Mes fin
+    <input type="number" min="1" max="12" [(ngModel)]="mesFin" />
+  </label>
+  <label>
+    Transporte
+    <select [(ngModel)]="transporte">
+      <option value="">Todos</option>
+      @for (t of transportes; track t) {
+        <option [value]="t">{{ t }}</option>
+      }
+    </select>
+  </label>
+  <button type="button" (click)="buscar()">Aplicar filtros</button>
+</section>
+@if (error) {
+  <p class="error">{{ error }}</p>
+}
+@if (loading) {
+  <p class="loading">Cargando...</p>
+}
+<section class="cards">
+  @for (v of variables; track v) {
+    <article class="card">
+      <h3>{{ v }}</h3>
+      <p>{{ totalPorVariable(v) | number:'1.0-0' }}</p>
+    </article>
+  }
+</section>
