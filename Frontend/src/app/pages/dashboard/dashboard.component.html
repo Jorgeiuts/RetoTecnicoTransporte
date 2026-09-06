@@ -44,3 +44,17 @@
     </article>
   }
 </section>
+<section class="chart-panel">
+  <div class="chart-header">
+    <h2>Evolución en el periodo</h2>
+    <label>
+      Variable
+      <select [(ngModel)]="variableGrafica" (ngModelChange)="actualizarGrafica()">
+        @for (v of variables; track v) {
+          <option [value]="v">{{ v }}</option>
+        }
+      </select>
+    </label>
+  </div>
+  <canvas #chartCanvas></canvas>
+</section>

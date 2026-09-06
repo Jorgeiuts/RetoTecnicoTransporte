@@ -1,8 +1,26 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { EtupService, EtupStat } from "../../core/etup.service";
 import { AuthService } from "../../core/auth.service";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { Chart, LineController, LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Filler } from 'chart.js';
+
+Chart.register(
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+  Filler,
+);
 
 const VARIABLES = [
   'Ingresos por pasaje',
@@ -19,7 +37,9 @@ const VARIABLES = [
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit, AfterViewInit {
+  @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
+
   transportes: string[] = [];
   stats: EtupStat[] = [];
   anioInicio = 2020;
@@ -30,6 +50,9 @@ export class DashboardComponent {
 
   loading = false;
   error = '';
+
+  variableGrafica: string = VARIABLES[0];
+  private chart?: Chart;
 
   readonly variables = VARIABLES;
   constructor(
@@ -43,6 +66,10 @@ export class DashboardComponent {
       error: () => (this.error = 'No se pudieron cargar transportes'),
     });
     this.buscar();
+  }
+
+  ngAfterViewInit() {
+    this.actualizarGrafica();
   }
 
   buscar() {
@@ -60,12 +87,50 @@ export class DashboardComponent {
         next: (data) => {
           this.stats = data;
           this.loading = false;
+          this.actualizarGrafica();
         },
         error: () => {
           this.loading = false;
           this.error = 'Error al cargar estadísticas';
         },
       });
+  }
+
+  actualizarGrafica() {
+    if (!this.chartCanvas) return;
+    const serie = this.seriePorVariable(this.variableGrafica);
+    const labels = serie.map((p) => p.periodo);
+    const values = serie.map((p) => p.total);
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    this.chart = new Chart(this.chartCanvas.nativeElement, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: this.variableGrafica,
+            data: values,
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.15)',
+            pointBackgroundColor: '#1e3a5f',
+            fill: true,
+            tension: 0.25,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true },
+        },
+        scales: {
+          x: { title: { display: true, text: 'Periodo (año-mes)' } },
+          y: { beginAtZero: true, title: { display: true, text: 'Total' } },
+        },
+      },
+    });
   }
 
   totalPorVariable(variable: string): number {
