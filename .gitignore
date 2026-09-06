@@ -31,3 +31,5 @@ coverage/
 
 # IntelliJ
 .idea/
+# AWS / SSH private keys
+*.pem
